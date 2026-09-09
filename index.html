@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>70.3 Training Plan</title>
+
+  <style>
+    :root {
+      --bg: #101418;
+      --panel: #192127;
+      --panel2: #222d35;
+      --text: #f1f5f4;
+      --muted: #9eadae;
+      --accent: #73d2a5;
+      --accent2: #70b7ff;
+      --warning: #f6c667;
+      --danger: #f37b7b;
+      --border: #33434c;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    header {
+      padding: 22px 18px 16px;
+      background: linear-gradient(135deg, #18352d, #17242d);
+      border-bottom: 1px solid var(--border);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.45rem;
+    }
+
+    header p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      overflow-x: auto;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    button, select, input, textarea {
+      font: inherit;
+    }
+
+    button, select {
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--text);
+      border-radius: 9px;
+      padding: 9px 12px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      border-color: var(--accent);
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #0d2018;
+      border: none;
+      font-weight: 700;
+    }
+
+    main {
+      max-width: 850px;
+      margin: auto;
+      padding: 14px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.35rem;
+      color: var(--accent);
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: .76rem;
+    }
+
+    .week-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 22px 2px 8px;
+    }
+
+    .week-title h2 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .week-title span {
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .day {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      margin-bottom: 9px;
+      overflow: hidden;
+    }
+
+    .day.completed {
+      opacity: .67;
+    }
+
+    .day.event {
+      border-color: var(--warning);
+    }
+
+    .day-head {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 12px;
+    }
+
+    .check {
+      width: 24px;
+      height: 24px;
+      accent-color: var(--accent);
+      flex: 0 0 auto;
+    }
+
+    .date {
+      width: 58px;
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.2;
+    }
+
+    .date strong {
+      display: block;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .workout {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .workout-title {
+      font-weight: 700;
+    }
+
+    .workout-meta {
+      color: var(--muted);
+      font-size: .82rem;
+      margin-top: 3px;
+    }
+
+    .type {
+      border-radius: 20px;
+      padding: 4px 8px;
+      font-size: .7rem;
+      background: var(--panel2);
+      color: var(--accent2);
+      white-space: nowrap;
+    }
+
+    .details {
+      display: none;
+      padding: 0 12px 13px 59px;
+      border-top: 1px solid var(--border);
+    }
+
+    .day.open .details {
+      display: block;
+    }
+
+    .details p {
+      color: #d5dfdf;
+      font-size: .9rem;
+      line-height: 1.45;
+      margin: 12px 0;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 58px;
+      resize: vertical;
+      background: #11191d;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    .rpe-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .rpe-row select {
+      padding: 5px;
+    }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 30px;
+    }
+
+    @media (max-width: 520px) {
+      .type { display: none; }
+      .summary { grid-template-columns: repeat(3, 1fr); }
+      .stat { padding: 9px; }
+      .stat strong { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>70.3 Sub-5 Training</h1>
+    <p>Waiheke hills · ocean swimming · Tuesday futsal · 6 March 2027</p>
+  </header>
+
+  <div class="toolbar">
+    <button class="primary" onclick="showToday()">Today</button>
+    <button onclick="changeWeek(-1)">← Previous</button>
+    <button onclick="changeWeek(1)">Next →</button>
+    <select id="filter" onchange="render()">
+      <option value="all">All sessions</option>
+      <option value="incomplete">Incomplete</option>
+      <option value="completed">Completed</option>
+      <option value="bike">Bike</option>
+      <option value="run">Run</option>
+      <option value="swim">Swim</option>
+      <option value="futsal">Futsal</option>
+    </select>
+  </div>
+
+  <main>
+    <section class="summary">
+      <div class="stat">
+        <strong id="completedCount">0</strong>
+        <span>completed</span>
+      </div>
+      <div class="stat">
+        <strong id="weekCount">0</strong>
+        <span>this week</span>
+      </div>
+      <div class="stat">
+        <strong id="daysToRace">—</strong>
+        <span>days to race</span>
+      </div>
+    </section>
+
+    <div id="calendar"></div>
+  </main>
+
+<script>
+const PLAN_START = new Date("2026-09-09T00:00:00");
+const RACE_DATE = new Date("2027-03-06T00:00:00");
+
+let viewDate = new Date();
+let saved = JSON.parse(localStorage.getItem("triPlanData") || "{}");
+
+const holidays = {
+  "2026-09-23": "Holiday",
+  "2026-09-24": "Holiday",
+  "2026-09-25": "Holiday",
+  "2026-09-26": "Holiday",
+  "2026-11-01": "Holiday",
+  "2026-11-02": "Holiday",
+  "2026-11-03": "Holiday",
+  "2026-11-04": "Holiday",
+  "2026-11-05": "Holiday",
+  "2026-11-06": "Holiday",
+  "2026-11-07": "Holiday",
+  "2026-11-08": "Holiday"
+};
+
+const specialEvents = {
+  "2027-02-14": {
+    title: "Rotorua 23 km trail race",
+    type: "run",
+    duration: "Race",
+    detail: "Run this at controlled RPE 5–6. Hike steep climbs. Treat it as a supported long run, not an all-out race."
+  },
+  "2027-03-06": {
+    title: "70.3 RACE DAY",
+    type: "race",
+    duration: "Race",
+    detail: "Swim relaxed, bike conservatively, and begin the run easier than you think you should."
+  }
+};
+
+const phaseNames = [
+  "Consistency",
+  "Aerobic base",
+  "Strength and threshold",
+  "70.3 development",
+  "Peak preparation",
+  "Taper"
+];
+
+function key(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function addDays(date, days) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+  return d;
+}
+
+function weekNumber(date) {
+  return Math.max(0, Math.floor((date - PLAN_START) / 604800000));
+}
+
+function phaseFor(week) {
+  if (week <= 3) return 0;
+  if (week <= 8) return 1;
+  if (week <= 12) return 2;
+  if (week <= 16) return 3;
+  if (week <= 21) return 4;
+  return 5;
+}
+
+function workoutFor(date) {
+  const k = key(date);
+  const day = date.getDay();
+  const w = weekNumber(date);
+  const phase = phaseFor(w);
+
+  if (specialEvents[k]) return specialEvents[k];
+
+  if (holidays[k]) {
+    return {
+      title: "Holiday — optional easy training",
+      type: "rest",
+      duration: "Rest / 30–60 min",
+      detail: "Enjoy the holiday. Choose easy swimming, walking, cycling, or running only. Do not force the normal plan."
+    };
+  }
+
+  // Sunday = 0, Monday = 1, etc.
+  if (day === 2) {
+    return {
+      title: "Indoor futsal",
+      type: "futsal",
+      duration: "60 min",
+      detail: "Your non-negotiable happy-place session. Count this as a hard running session. Warm up properly and avoid extra intervals."
+    };
+  }
+
+  if (day === 1) {
+    return {
+      title: "Easy ocean swim",
+      type: "swim",
+      duration: phase >= 3 ? "35–50 min" : "20–40 min",
+      detail: "Easy technique and relaxed breathing. Use a bright tow float and swim with a buddy or in a supervised area."
+    };
+  }
+
+  if (day === 3) {
+    return {
+      title: "Easy aerobic bike",
+      type: "bike",
+      duration: phase >= 4 ? "60–75 min" : "45–60 min",
+      detail: "RPE 3–4. Keep this genuinely easy, especially after futsal."
+    };
+  }
+
+  if (day === 4) {
+    const intervals = [
+      "4 × 4 min at RPE 6, 3 min easy between",
+      "5 × 4 min at RPE 6, 3 min easy between",
+      "3 × 8 min at RPE 6, 4 min easy between",
+      "3 × 10 min at RPE 6–7, 4 min easy between",
+      "2 × 15 min at RPE 6, 5 min easy between",
+      "3 × 12 min at RPE 6, 5 min easy between"
+    ];
+
+    return {
+      title: "Quality bike",
+      type: "bike",
+      duration: phase === 5 ? "45–60 min" : "60–90 min",
+      detail: phase === 5
+        ? "Short race-effort efforts. Finish feeling sharp, not tired."
+        : intervals[Math.min(phase + Math.floor(w / 4), intervals.length - 1)]
+    };
+  }
+
+  if (day === 5) {
+    return {
+      title: "Easy run + strength",
+      type: "run",
+      duration: phase >= 4 ? "40–55 min" : "35–50 min",
+      detail: "RPE 3–4. Add 20–30 minutes of calf raises, split squats, step-ups, Romanian deadlifts, glute bridges, and planks."
+    };
+  }
+
+  if (day === 6) {
+    const bikeHours = [1.5, 2, 2.25, 2.75, 3.25, 3.5, 2.5, 3.5, 4, 4.25, 4.5, 3, 2.5, 1.5];
+    const index = Math.min(Math.max(w - 1, 0), bikeHours.length - 1);
+    const hours = bikeHours[index];
+
+    return {
+      title: "Long bike + brick",
+      type: "bike",
+      duration: `${hours} hr bike + ${phase >= 3 ? 25 : 15} min run`,
+      detail: "Bike mostly at RPE 3–4. Finish the final 30–60 minutes at RPE 5 when prescribed. Practise 60–90 g carbohydrate per hour and your race equipment."
+    };
+  }
+
+  return {
+    title: "Long easy run",
+    type: "run",
+    duration: phase >= 4 ? "75–105 min" : "60–90 min",
+    detail: "RPE 3–4. Keep hills controlled. Walk steep sections if needed. This should not become a race against futsal fatigue."
+  };
+}
+
+function formatDate(date) {
+  return date.toLocaleDateString("en-NZ", {
+    weekday: "short",
+    day: "numeric",
+    month: "short"
+  });
+}
+
+function render() {
+  const calendar = document.getElementById("calendar");
+  const filter = document.getElementById("filter").value;
+  calendar.innerHTML = "";
+
+  const start = new Date(viewDate);
+  start.setDate(start.getDate() - start.getDay());
+
+  let visible = 0;
+  let weekTotal = 0;
+  let weekCompleted = 0;
+
+  for (let i = 0; i < 7; i++) {
+    const date = addDays(start, i);
+    const k = key(date);
+    const workout = workoutFor(date);
+    const data = saved[k] || {};
+    const completed = data.completed || false;
+
+    weekTotal++;
+    if (completed) weekCompleted++;
+
+    const matches =
+      filter === "all" ||
+      filter === "completed" && completed ||
+      filter === "incomplete" && !completed ||
+      filter === workout.type;
+
+    if (!matches) continue;
+    visible++;
+
+    const card = document.createElement("article");
+    card.className = `day ${completed ? "completed" : ""} ${specialEvents[k] ? "event" : ""}`;
+    card.innerHTML = `
+      <div class="day-head">
+        <input class="check" type="checkbox" ${completed ? "checked" : ""}
+          onchange="toggleComplete('${k}', this.checked)">
+        <div class="date">
+          ${formatDate(date).split(" ")[0]}
+          <strong>${date.getDate()}</strong>
+        </div>
+        <div class="workout">
+          <div class="workout-title">${workout.title}</div>
+          <div class="workout-meta">${workout.duration}</div>
+        </div>
+        <div class="type">${workout.type}</div>
+        <button onclick="toggleDetails(this)">+</button>
+      </div>
+
+      <div class="details">
+        <p>${workout.detail}</p>
+        <textarea placeholder="Add thoughts, pain, nutrition, weather, splits..."
+          onchange="saveNote('${k}', this.value)">${data.note || ""}</textarea>
+        <div class="rpe-row">
+          Actual RPE:
+          <select onchange="saveRpe('${k}', this.value)">
+            <option value="">—</option>
+            ${[1,2,3,4,5,6,7,8,9,10].map(n =>
+              `<option ${String(data.rpe) === String(n) ? "selected" : ""}>${n}</option>`
+            ).join("")}
+          </select>
+        </div>
+      </div>
+    `;
+
+    calendar.appendChild(card);
+  }
+
+  if (!visible) {
+    calendar.innerHTML = `<div class="empty">No sessions match this filter.</div>`;
+  }
+
+  document.getElementById("completedCount").textContent =
+    Object.values(saved).filter(x => x.completed).length;
+
+  document.getElementById("weekCount").textContent =
+    `${weekCompleted}/${weekTotal}`;
+
+  const days = Math.ceil((RACE_DATE - new Date()) / 86400000);
+  document.getElementById("daysToRace").textContent = Math.max(0, days);
+}
+
+function toggleDetails(button) {
+  button.closest(".day").classList.toggle("open");
+  button.textContent = button.textContent === "+" ? "−" : "+";
+}
+
+function toggleComplete(date, value) {
+  saved[date] = saved[date] || {};
+  saved[date].completed = value;
+  localStorage.setItem("triPlanData", JSON.stringify(saved));
+  render();
+}
+
+function saveNote(date, value) {
+  saved[date] = saved[date] || {};
+  saved[date].note = value;
+  localStorage.setItem("triPlanData", JSON.stringify(saved));
+}
+
+function saveRpe(date, value) {
+  saved[date] = saved[date] || {};
+  saved[date].rpe = value;
+  localStorage.setItem("triPlanData", JSON.stringify(saved));
+}
+
+function changeWeek(amount) {
+  viewDate.setDate(viewDate.getDate() + amount * 7);
+  render();
+}
+
+function showToday() {
+  viewDate = new Date();
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
