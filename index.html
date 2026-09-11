@@ -1,880 +1,263 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101418">
-  <title>70.3 Training Plan</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coach Dashboard | T21 & 70.3 Tracker</title>
   <style>
     :root {
-      --bg: #101418;
-      --panel: #192127;
-      --panel-dark: #11191d;
-      --panel-light: #25323a;
-      --text: #f1f5f4;
-      --muted: #9eadae;
-      --accent: #73d2a5;
-      --blue: #70b7ff;
-      --yellow: #f6c667;
-      --red: #f37b7b;
-      --border: #33434c;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --success: #16a34a;
     }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding-bottom: 60px; }
+    header { background: var(--card); border-bottom: 1px solid var(--border); padding: 15px 20px; text-align: center; position: sticky; top: 0; z-index: 100; }
+    header h1 { font-size: 1.2rem; color: #60a5fa; text-transform: uppercase; letter-spacing: 1px; }
+    header p { font-size: 0.8rem; color: var(--text-muted); }
+    
+    nav { display: flex; overflow-x: auto; background: var(--card); border-bottom: 1px solid var(--border); padding: 5px; gap: 5px; scrollbar-width: none; }
+    nav::-webkit-scrollbar { display: none; }
+    nav button { background: transparent; border: none; color: var(--text-muted); padding: 8px 14px; font-size: 0.85rem; font-weight: 600; border-radius: 6px; cursor: pointer; whitespace: nowrap; }
+    nav button.active { background: var(--accent); color: #fff; }
 
-    * {
-      box-sizing: border-box;
-    }
+    .container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin-bottom: 15px; }
+    .card h2 { font-size: 1.1rem; color: #93c5fd; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+    th, td { border: 1px solid var(--border); padding: 8px; text-align: left; }
+    th { background: #0f172a; color: #93c5fd; }
+    
+    input, select, textarea { width: 100%; background: #0f172a; border: 1px solid var(--border); color: #fff; padding: 8px; border-radius: 5px; font-size: 0.85rem; margin-top: 4px; }
+    label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: bold; }
+    
+    .btn { background: var(--accent); color: #fff; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    .btn:hover { background: var(--accent-hover); }
+    .btn-success { background: var(--success); }
 
-    header {
-      padding: 22px 18px 18px;
-      background: linear-gradient(135deg, #18352d, #17242d);
-      border-bottom: 1px solid var(--border);
-    }
-
-    header h1 {
-      max-width: 850px;
-      margin: 0 auto;
-      font-size: 1.5rem;
-    }
-
-    header p {
-      max-width: 850px;
-      margin: 6px auto 0;
-      color: var(--muted);
-      font-size: .9rem;
-    }
-
-    .race-countdowns {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      max-width: 850px;
-      margin: 14px auto 0;
-      padding: 0 14px;
-    }
-
-    .race-card {
-      padding: 14px;
-      border-radius: 13px;
-      border: 1px solid var(--border);
-      background: var(--panel);
-    }
-
-    .race-card.trail {
-      border-color: var(--yellow);
-    }
-
-    .race-card.main-race {
-      border-color: var(--accent);
-      background: linear-gradient(135deg, #193a30, #19282b);
-    }
-
-    .race-label {
-      color: var(--muted);
-      font-size: .68rem;
-      letter-spacing: .12em;
-      font-weight: 700;
-    }
-
-    .race-card h2 {
-      margin: 5px 0 3px;
-      font-size: 1.03rem;
-    }
-
-    .race-card strong {
-      font-size: .82rem;
-    }
-
-    .countdown {
-      margin-top: 10px;
-      color: var(--accent);
-      font-weight: 800;
-      font-size: 1.25rem;
-    }
-
-    .toolbar {
-      display: flex;
-      gap: 8px;
-      padding: 12px;
-      overflow-x: auto;
-      background: var(--panel);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 5;
-    }
-
-    button,
-    select,
-    textarea {
-      font: inherit;
-    }
-
-    button,
-    select {
-      border: 1px solid var(--border);
-      background: var(--panel-light);
-      color: var(--text);
-      border-radius: 9px;
-      padding: 9px 12px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      border-color: var(--accent);
-    }
-
-    .primary {
-      background: var(--accent);
-      color: #0d2018;
-      border: none;
-      font-weight: 700;
-    }
-
-    main {
-      max-width: 850px;
-      margin: auto;
-      padding: 14px;
-    }
-
-    .summary {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .stat {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px;
-    }
-
-    .stat strong {
-      display: block;
-      font-size: 1.3rem;
-      color: var(--accent);
-    }
-
-    .stat span {
-      color: var(--muted);
-      font-size: .76rem;
-    }
-
-    .week-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 22px 2px 8px;
-    }
-
-    .week-title h2 {
-      margin: 0;
-      font-size: 1rem;
-    }
-
-    .week-title span {
-      color: var(--muted);
-      font-size: .8rem;
-    }
-
-    .day {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      margin-bottom: 9px;
-      overflow: hidden;
-    }
-
-    .day.completed {
-      opacity: .67;
-    }
-
-    .day.event {
-      border-color: var(--yellow);
-    }
-
-    .day.race-day {
-      border-color: var(--accent);
-      background: linear-gradient(135deg, #193a30, #19282b);
-    }
-
-    .day-head {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      padding: 12px;
-    }
-
-    .check {
-      width: 24px;
-      height: 24px;
-      accent-color: var(--accent);
-      flex: 0 0 auto;
-    }
-
-    .date {
-      width: 108px;
-      color: var(--muted);
-      font-size: .78rem;
-      line-height: 1.25;
-      flex: 0 0 auto;
-    }
-
-    .date strong {
-      display: block;
-      color: var(--text);
-      font-size: .92rem;
-    }
-
-    .workout {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .workout-title {
-      font-weight: 700;
-    }
-
-    .workout-meta {
-      color: var(--muted);
-      font-size: .82rem;
-      margin-top: 3px;
-    }
-
-    .type {
-      border-radius: 20px;
-      padding: 4px 8px;
-      font-size: .7rem;
-      background: var(--panel-light);
-      color: var(--blue);
-      white-space: nowrap;
-    }
-
-    .details {
-      display: none;
-      padding: 0 12px 13px 59px;
-      border-top: 1px solid var(--border);
-    }
-
-    .day.open .details {
-      display: block;
-    }
-
-    .details p {
-      color: #d5dfdf;
-      font-size: .9rem;
-      line-height: 1.45;
-      margin: 12px 0;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 66px;
-      resize: vertical;
-      background: var(--panel-dark);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px;
-    }
-
-    .rpe-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: .8rem;
-    }
-
-    .rpe-row select {
-      padding: 5px 8px;
-    }
-
-    .empty {
-      color: var(--muted);
-      text-align: center;
-      padding: 30px;
-    }
-
-    @media (max-width: 560px) {
-      .race-countdowns {
-        grid-template-columns: 1fr;
-      }
-
-      .type {
-        display: none;
-      }
-
-      .date {
-        width: 86px;
-        font-size: .72rem;
-      }
-
-      .summary {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .stat {
-        padding: 9px;
-      }
-
-      .stat strong {
-        font-size: 1.05rem;
-      }
-
-      .details {
-        padding-left: 12px;
-      }
-    }
+    .day-block { border-left: 4px solid var(--accent); padding-left: 12px; margin-bottom: 15px; }
+    .day-title { font-weight: bold; color: #f1f5f9; display: flex; justify-content: space-between; }
+    .day-sub { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; }
   </style>
 </head>
-
 <body>
 
-  <header>
-    <h1>70.3 Sub-5 Training Plan</h1>
-    <p>Waiheke hills · ocean swimming from December · Tuesday futsal · RPE-based training</p>
-  </header>
+<header>
+  <h1>Triathlon Coaching Dashboard</h1>
+  <p>Athlete: 27yo Male | Targets: T21 Sub-1:35 | Taupō 70.3 Sub-5:00</p>
+</header>
 
-  <section class="race-countdowns">
-    <div class="race-card trail">
-      <div class="race-label">NEXT EVENT</div>
-      <h2>Rotorua Trail Race</h2>
-      <strong>23 km · Sunday 14 February 2027</strong>
-      <div id="trailCountdown" class="countdown"></div>
+<nav id="nav-tabs">
+  <button class="active" onclick="switchTab('dashboard')">Dashboard</button>
+  <button onclick="switchTab('w01')">Week 01</button>
+  <button onclick="switchTab('w02')">Week 02</button>
+  <button onclick="switchTab('prehab')">Strength & Prehab</button>
+  <button onclick="switchTab('nutrition')">Nutrition</button>
+</nav>
+
+<div class="container">
+
+  <!-- DASHBOARD TAB -->
+  <div id="dashboard" class="tab-content active">
+    <div class="card">
+      <h2>Primary Goals & Reality Check</h2>
+      <div class="grid-2">
+        <div>
+          <strong>Tarawera T21 (13 Feb 2027)</strong>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Target: Sub-1:35 (~4:08/km pace over 23km / 400m vert)</p>
+        </div>
+        <div>
+          <strong>Taupō 70.3 (6 Mar 2027)</strong>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Target: Sub-5:00 (~33m Swim / 2h35m Bike / 1h40m Run)</p>
+        </div>
+      </div>
     </div>
 
-    <div class="race-card main-race">
-      <div class="race-label">A-RACE</div>
-      <h2>70.3 Race Day</h2>
-      <strong>Saturday 6 March 2027</strong>
-      <div id="raceCountdown" class="countdown"></div>
+    <div class="card">
+      <h2>Master Schedule Rules</h2>
+      <ul style="font-size: 0.85rem; color: var(--text-muted); padding-left: 20px; line-height: 1.6;">
+        <li><strong>Work Days:</strong> Sunday – Wednesday (08:00 – 18:00) | No Long Runs.</li>
+        <li><strong>Football:</strong> Tuesday 19:00–20:00 (High intensity, mandatory 5m ankle warm-up).</li>
+        <li><strong>Key Run Day:</strong> Thursday (Hills / Intervals / Speed).</li>
+        <li><strong>Key Bike Day:</strong> Friday (Aerobic + Aerobar progression).</li>
+        <li><strong>Default Long Run:</strong> Saturday (Trail & Vert emphasis).</li>
+      </ul>
     </div>
-  </section>
+  </div>
 
-  <nav class="toolbar">
-    <button class="primary" onclick="showToday()">Today</button>
-    <button onclick="changeWeek(-1)">← Previous</button>
-    <button onclick="changeWeek(1)">Next →</button>
-
-    <select id="filter" onchange="render()">
-      <option value="all">All sessions</option>
-      <option value="incomplete">Incomplete</option>
-      <option value="completed">Completed</option>
-      <option value="bike">Bike</option>
-      <option value="run">Run</option>
-      <option value="swim">Swim</option>
-      <option value="futsal">Futsal</option>
-      <option value="rest">Rest</option>
-    </select>
-  </nav>
-
-  <main>
-    <section class="summary">
-      <div class="stat">
-        <strong id="completedCount">0</strong>
-        <span>completed</span>
+  <!-- WEEK 01 TAB -->
+  <div id="w01" class="tab-content">
+    <div class="card">
+      <h2>Week 01: Re-Entry & Aerobic Base (13 Sep – 19 Sep 2026)</h2>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Enter your actual data after workouts. Saves automatically to your browser local storage.</p>
+      
+      <!-- Sunday -->
+      <div class="day-block">
+        <div class="day-title"><span>SUN 13 SEP — Active Recovery & Mobility</span><span>Target: RPE 2</span></div>
+        <div class="day-sub">Work 08:00–18:00 | 25m Ankle Prehab + Core Routine</div>
+        <div class="grid-2">
+          <div><label>Actual Dur (min)</label><input type="number" id="w01_sun_dur" placeholder="25"></div>
+          <div><label>Actual RPE (1-10)</label><input type="number" id="w01_sun_rpe" placeholder="2"></div>
+        </div>
       </div>
 
-      <div class="stat">
-        <strong id="weekCount">0/7</strong>
-        <span>this week</span>
+      <!-- Monday -->
+      <div class="day-block">
+        <div class="day-title"><span>MON 14 SEP — Aerobic Base Run</span><span>Target: RPE 3-4 (Z2)</span></div>
+        <div class="day-sub">Work 08:00–18:00 | 45m (~7-8 km) Nose-breathing run</div>
+        <div class="grid-2">
+          <div><label>Dist (km) / Pace</label><input type="text" id="w01_mon_dist" placeholder="7.5 km @ 5:45/km"></div>
+          <div><label>Avg / Max HR</label><input type="text" id="w01_mon_hr" placeholder="148 / 158 bpm"></div>
+        </div>
       </div>
 
-      <div class="stat">
-        <strong id="daysToRace">—</strong>
-        <span>days to 70.3</span>
+      <!-- Tuesday -->
+      <div class="day-block">
+        <div class="day-title"><span>TUE 15 SEP — Indoor Football</span><span>Target: RPE 7-8</span></div>
+        <div class="day-sub">Work 08:00–18:00 | 60m Football (5m dynamic ankle warm-up pre-game)</div>
+        <div class="grid-2">
+          <div><label>Actual RPE</label><input type="number" id="w01_tue_rpe" placeholder="8"></div>
+          <div><label>Ankle/Joint Sensation</label><input type="text" id="w01_tue_notes" placeholder="Fine / slight tightness"></div>
+        </div>
       </div>
-    </section>
 
-    <div id="calendar"></div>
-  </main>
+      <!-- Thursday -->
+      <div class="day-block">
+        <div class="day-title"><span>THU 17 SEP — Key Run: Hill Repeats</span><span>Target: RPE 7-8</span></div>
+        <div class="day-sub">Day Off Work | 40m total (15m W/U + 6x60s Hill Climbs + 10m C/D)</div>
+        <div class="grid-2">
+          <div><label>Dist / Elevation</label><input type="text" id="w01_thu_dist" placeholder="6.2 km / 120m vert"></div>
+          <div><label>Avg / Max HR</label><input type="text" id="w01_thu_hr" placeholder="162 / 181 bpm"></div>
+        </div>
+      </div>
+
+      <!-- Friday -->
+      <div class="day-block">
+        <div class="day-title"><span>FRI 18 SEP — Key Bike: Aerobic + Aero Intro</span><span>Target: RPE 3-4</span></div>
+        <div class="day-sub">Day Off Work | 75m Road Bike (4x3m Aero touches on flat)</div>
+        <div class="grid-2">
+          <div><label>Speed / Cadence</label><input type="text" id="w01_fri_speed" placeholder="27.5 km/h @ 88 rpm"></div>
+          <div><label>Fuel Consumed</label><input type="text" id="w01_fri_fuel" placeholder="1 gel + 750ml water"></div>
+        </div>
+      </div>
+
+      <!-- Saturday -->
+      <div class="day-block">
+        <div class="day-title"><span>SAT 19 SEP — Default Long Run: Trail</span><span>Target: RPE 3-4 (Z2)</span></div>
+        <div class="day-sub">Day Off Work | 75m Trail Run (~150-200m vert)</div>
+        <div class="grid-2">
+          <div><label>Dist / Vert</label><input type="text" id="w01_sat_dist" placeholder="12 km / 180m vert"></div>
+          <div><label>Pre-Run Meal / Fuel</label><input type="text" id="w01_sat_fuel" placeholder="Toast+Jam, 1 gel @ 40m"></div>
+        </div>
+      </div>
+
+      <!-- Summary / Feedback Section -->
+      <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 15px;">
+        <label>Polar Chest Strap Status</label>
+        <input type="text" id="w01_polar_status" placeholder="Re-paired and functional? Ready for Mon 21 Sep test?">
+        
+        <label style="margin-top: 10px; display: block;">Weekly Feedback & Niggles (For Coach Review)</label>
+        <textarea id="w01_weekly_notes" rows="3" placeholder="Overall sleep, muscle fatigue, ankle status, questions..."></textarea>
+        
+        <button class="btn btn-success" onclick="saveWeek('w01')">Save Data</button>
+        <button class="btn" onclick="copyWeeklySummary('w01')">Copy Summary for Chat Review</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STRENGTH & PREHAB TAB -->
+  <div id="prehab" class="tab-content">
+    <div class="card">
+      <h2>Ankle, Knee & Upper Body Library</h2>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">Perform 2-3x weekly on yoga mat (Bodyweight + 1 Dumbbell if available).</p>
+      <table>
+        <thead>
+          <tr><th>Exercise</th><th>Sets & Reps</th><th>Focus Cue</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Single-Leg Calf Raises</td><td>3 x 15 reps/side</td><td>3-sec lowering; pause at top. Achilles durability.</td></tr>
+          <tr><td>Seated Tibialis Raises</td><td>3 x 20 reps</td><td>Flex toes toward shins against wall/weight. Prevents shin splints.</td></tr>
+          <tr><td>Single-Leg Cushion Balance</td><td>3 x 45s/side</td><td>Micro-adjust at ankle; slight knee flex. Ankle stability.</td></tr>
+          <tr><td>Bulgarian Split Squats</td><td>3 x 10-12/side</td><td>Knee tracks over 2nd toe; full depth. VMO / knee health.</td></tr>
+          <tr><td>Single-Leg Glute Bridges</td><td>3 x 12 reps/side</td><td>Squeeze glute at top lock. Posterior chain power.</td></tr>
+          <tr><td>Push-ups & Hollow Holds</td><td>3 x 12-15 / 3x45s</td><td>Locked core. Upper chest/shoulder hypertrophy & posture.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- NUTRITION TAB -->
+  <div id="nutrition" class="tab-content">
+    <div class="card">
+      <h2>Race Fueling & Stomach Lockdown</h2>
+      <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+        <p style="color: #ef4444; font-weight: bold;">MANDATE: ZERO RAW/UNCOOKED STARCHES BEFORE RACES OR HARD EFFORTS.</p>
+        <br>
+        <p><strong>Pre-Race / Key Session Breakfast (2.5 - 3 Hours Prior):</strong></p>
+        <ul>
+          <li>2 slices white toast with jam or honey</li>
+          <li>1 medium ripe banana</li>
+          <li>300–400ml water or light electrolyte drink</li>
+        </ul>
+        <br>
+        <p><strong>During Bike (70.3 Prep):</strong> 60–80g carbs/hr (1 isotonic bottle + 1 gel per 45 min).</p>
+        <p><strong>During Trail Run (T21 Prep):</strong> 30–45g carbs/hr (1 hydrogel every 40-45m with plain water).</p>
+      </div>
+    </div>
+  </div>
+
+</div>
 
 <script>
-  const PLAN_START = new Date("2026-09-09T00:00:00");
-  const RACE_DATE = new Date("2027-03-06T00:00:00");
-
-  let viewDate = new Date();
-
-  let saved = JSON.parse(
-    localStorage.getItem("waihekeTriPlan") || "{}"
-  );
-
-  /*
-    Complete holiday blocks.
-
-    23–26 September:
-    Workout on 27 September remains available.
-
-    1–9 November:
-    No training is scheduled.
-  */
-  const holidays = {
-    "2026-09-23": "Holiday",
-    "2026-09-24": "Holiday",
-    "2026-09-25": "Holiday",
-    "2026-09-26": "Holiday",
-
-    "2026-11-01": "Holiday",
-    "2026-11-02": "Holiday",
-    "2026-11-03": "Holiday",
-    "2026-11-04": "Holiday",
-    "2026-11-05": "Holiday",
-    "2026-11-06": "Holiday",
-    "2026-11-07": "Holiday",
-    "2026-11-08": "Holiday",
-    "2026-11-09": "Holiday"
-  };
-
-  const specialEvents = {
-    "2027-02-14": {
-      title: "Rotorua 23 km trail race",
-      type: "run",
-      duration: "Race day",
-      detail:
-        "Run at controlled RPE 5–6. Hike steep climbs. Treat this as a supported long run rather than an all-out race."
-    },
-
-    "2027-03-06": {
-      title: "70.3 RACE DAY",
-      type: "race",
-      duration: "Race day",
-      detail:
-        "Swim relaxed, bike conservatively, fuel consistently, and begin the run easier than you think you should."
-    }
-  };
-
-  function dateKey(date) {
-    return date.toISOString().slice(0, 10);
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
+    
+    document.getElementById(tabId).classList.add('active');
+    event.target.classList.add('active');
   }
 
-  function addDays(date, days) {
-    const result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
+  function saveWeek(weekId) {
+    const inputs = document.querySelectorAll(`#${weekId} input, #${weekId} textarea`);
+    inputs.forEach(input => {
+      localStorage.setItem(input.id, input.value);
+    });
+    alert('Workout data saved locally!');
   }
 
-  function weekNumber(date) {
-    return Math.max(
-      0,
-      Math.floor((date - PLAN_START) / 604800000)
-    );
-  }
-
-  function phaseFor(week) {
-    if (week <= 3) return 0;
-    if (week <= 8) return 1;
-    if (week <= 12) return 2;
-    if (week <= 16) return 3;
-    if (week <= 21) return 4;
-    return 5;
-  }
-
-  function phaseName(phase) {
-    const names = [
-      "Consistency",
-      "Aerobic base",
-      "Strength and threshold",
-      "70.3 development",
-      "Peak preparation",
-      "Taper"
-    ];
-
-    return names[phase];
-  }
-
-  function getWorkout(date) {
-    const key = dateKey(date);
-    const day = date.getDay();
-    const week = weekNumber(date);
-    const phase = phaseFor(week);
-
-    if (specialEvents[key]) {
-      return specialEvents[key];
-    }
-
-    if (holidays[key]) {
-      return {
-        title: "Holiday — no planned training",
-        type: "rest",
-        duration: "Complete rest",
-        detail:
-          "Enjoy the holiday. No training is scheduled. Optional walking or gentle mobility is fine, but do not force a workout."
-      };
-    }
-
-    /*
-      Sunday = 0
-      Monday = 1
-      Tuesday = 2
-      Wednesday = 3
-      Thursday = 4
-      Friday = 5
-      Saturday = 6
-    */
-
-    if (day === 1) {
-      if (date < new Date("2026-12-01T00:00:00")) {
-        return {
-          title: "Rest / mobility",
-          type: "rest",
-          duration: "20–30 min optional",
-          detail:
-            "No swimming yet. Do easy mobility, walking, stretching, or complete rest."
-        };
-      }
-
-      return {
-        title: "Easy ocean swim",
-        type: "swim",
-        duration: phase >= 4 ? "35–50 min" : "20–40 min",
-        detail:
-          "Easy technique and relaxed breathing. Use a bright tow float and swim with a buddy or in a supervised area."
-      };
-    }
-
-    if (day === 2) {
-      return {
-        title: "Indoor futsal",
-        type: "futsal",
-        duration: "60 min",
-        detail:
-          "Your non-negotiable happy-place session. Count this as a hard running session. Warm up properly and avoid adding extra intervals."
-      };
-    }
-
-    if (day === 3) {
-      return {
-        title: "Easy aerobic bike",
-        type: "bike",
-        duration: phase >= 4 ? "60–75 min" : "45–60 min",
-        detail:
-          "RPE 3–4. Keep this genuinely easy, especially after futsal."
-      };
-    }
-
-    if (day === 4) {
-      const sessions = [
-        "4 × 4 min at RPE 6, with 3 min easy between",
-        "5 × 4 min at RPE 6, with 3 min easy between",
-        "3 × 8 min at RPE 6, with 4 min easy between",
-        "3 × 10 min at RPE 6–7, with 4 min easy between",
-        "2 × 15 min at RPE 6, with 5 min easy between",
-        "3 × 12 min at RPE 6, with 5 min easy between"
-      ];
-
-      return {
-        title: "Quality bike",
-        type: "bike",
-        duration: phase === 5 ? "45–60 min" : "60–90 min",
-        detail:
-          phase === 5
-            ? "Short race-effort efforts. Finish feeling sharp, not tired."
-            : sessions[Math.min(phase, sessions.length - 1)]
-      };
-    }
-
-    if (day === 5) {
-      return {
-        title: "Easy run + strength",
-        type: "run",
-        duration: phase >= 4 ? "40–55 min" : "35–50 min",
-        detail:
-          "Run at RPE 3–4. Then complete 20–30 minutes of calf raises, split squats, step-ups, Romanian deadlifts, glute bridges, planks, and side planks."
-      };
-    }
-
-    if (day === 6) {
-      const bikeDurations = [
-        "90 min bike + 10 min brick",
-        "2 hr bike + 15 min brick",
-        "2 hr 30 bike + 20 min brick",
-        "3 hr bike + 25 min brick",
-        "3 hr 30 bike + 30 min brick",
-        "4 hr bike + 35 min brick",
-        "4 hr 30 bike + 40 min brick",
-        "3 hr bike + 25 min brick",
-        "2 hr 30 bike + 20 min brick",
-        "90 min bike + 15 min brick"
-      ];
-
-      const duration =
-        bikeDurations[Math.min(Math.max(week - 1, 0), bikeDurations.length - 1)];
-
-      return {
-        title: "Long bike + brick",
-        type: "bike",
-        duration: duration,
-        detail:
-          "Bike mostly at RPE 3–4. Finish the final 30–60 minutes at RPE 5 when feeling good. Practise race nutrition, bottles, clothing, and transitions."
-      };
-    }
-
-    return {
-      title: "Long easy run",
-      type: "run",
-      duration: phase >= 4 ? "75–105 min" : "60–90 min",
-      detail:
-        "Run at RPE 3–4. Keep hills controlled and walk steep sections if needed. This should not become a race against futsal fatigue."
-    };
-  }
-
-  function formatLongDate(date) {
-    return date.toLocaleDateString("en-NZ", {
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-      year: "numeric"
+  function loadSavedData() {
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+      const saved = localStorage.getItem(input.id);
+      if (saved) input.value = saved;
     });
   }
 
-  function getDaysUntil(dateString) {
-    const target = new Date(dateString + "T00:00:00");
-    const today = new Date();
-
-    today.setHours(0, 0, 0, 0);
-
-    return Math.max(
-      0,
-      Math.ceil((target - today) / 86400000)
-    );
-  }
-
-  function renderCountdowns() {
-    const trailDays = getDaysUntil("2027-02-14");
-    const raceDays = getDaysUntil("2027-03-06");
-
-    document.getElementById("trailCountdown").textContent =
-      trailDays === 0 ? "Race day" : `${trailDays} days to go`;
-
-    document.getElementById("raceCountdown").textContent =
-      raceDays === 0 ? "Race day" : `${raceDays} days to go`;
-
-    document.getElementById("daysToRace").textContent = raceDays;
-  }
-
-  function render() {
-    const calendar = document.getElementById("calendar");
-    const filter = document.getElementById("filter").value;
-
-    calendar.innerHTML = "";
-
-    const weekStart = new Date(viewDate);
-    weekStart.setDate(
-      weekStart.getDate() - weekStart.getDay()
-    );
-
-    const weekEnd = addDays(weekStart, 6);
-
-    const weekTitle = document.createElement("div");
-    weekTitle.className = "week-title";
-    weekTitle.innerHTML = `
-      <h2>
-        ${weekStart.toLocaleDateString("en-NZ", {
-          day: "numeric",
-          month: "short"
-        })}
-        –
-        ${weekEnd.toLocaleDateString("en-NZ", {
-          day: "numeric",
-          month: "short",
-          year: "numeric"
-        })}
-      </h2>
-      <span>Phase: ${phaseName(phaseFor(weekNumber(weekStart)))}</span>
-    `;
-
-    calendar.appendChild(weekTitle);
-
-    let visible = 0;
-    let completedThisWeek = 0;
-
-    for (let i = 0; i < 7; i++) {
-      const date = addDays(weekStart, i);
-      const key = dateKey(date);
-      const workout = getWorkout(date);
-      const data = saved[key] || {};
-      const completed = Boolean(data.completed);
-
-      if (completed) {
-        completedThisWeek++;
+  function copyWeeklySummary(weekId) {
+    let summary = `[WEEKLY LOG SUBMISSION - ${weekId.toUpperCase()}]\n`;
+    const inputs = document.querySelectorAll(`#${weekId} input, #${weekId} textarea`);
+    inputs.forEach(input => {
+      if(input.value) {
+        summary += `- ${input.previousElementSibling ? input.previousElementSibling.innerText : input.id}: ${input.value}\n`;
       }
-
-      const matches =
-        filter === "all" ||
-        (filter === "completed" && completed) ||
-        (filter === "incomplete" && !completed) ||
-        filter === workout.type;
-
-      if (!matches) {
-        continue;
-      }
-
-      visible++;
-
-      const card = document.createElement("article");
-
-      let extraClass = "";
-
-      if (completed) {
-        extraClass += " completed";
-      }
-
-      if (specialEvents[key]) {
-        extraClass += " event";
-      }
-
-      if (workout.type === "race") {
-        extraClass += " race-day";
-      }
-
-      card.className = "day" + extraClass;
-
-      card.innerHTML = `
-        <div class="day-head">
-          <input
-            class="check"
-            type="checkbox"
-            ${completed ? "checked" : ""}
-            onchange="toggleComplete('${key}', this.checked)"
-            aria-label="Mark workout complete"
-          >
-
-          <div class="date">
-            <strong>${date.toLocaleDateString("en-NZ", {
-              weekday: "short"
-            })}</strong>
-            ${date.toLocaleDateString("en-NZ", {
-              day: "numeric",
-              month: "short",
-              year: "numeric"
-            })}
-          </div>
-
-          <div class="workout">
-            <div class="workout-title">${workout.title}</div>
-            <div class="workout-meta">${workout.duration}</div>
-          </div>
-
-          <div class="type">${workout.type}</div>
-
-          <button
-            type="button"
-            onclick="toggleDetails(this)"
-            aria-label="Show workout details"
-          >+</button>
-        </div>
-
-        <div class="details">
-          <p>${workout.detail}</p>
-
-          <textarea
-            placeholder="Add thoughts, pain, nutrition, weather, splits..."
-            onchange="saveNote('${key}', this.value)"
-          >${data.note || ""}</textarea>
-
-          <div class="rpe-row">
-            Actual RPE:
-
-            <select onchange="saveRpe('${key}', this.value)">
-              <option value="">—</option>
-              ${[1,2,3,4,5,6,7,8,9,10]
-                .map(number => `
-                  <option
-                    value="${number}"
-                    ${String(data.rpe) === String(number) ? "selected" : ""}
-                  >${number}</option>
-                `)
-                .join("")}
-            </select>
-          </div>
-        </div>
-      `;
-
-      calendar.appendChild(card);
-    }
-
-    if (!visible) {
-      const empty = document.createElement("div");
-      empty.className = "empty";
-      empty.textContent = "No sessions match this filter.";
-      calendar.appendChild(empty);
-    }
-
-    document.getElementById("completedCount").textContent =
-      Object.values(saved).filter(item => item.completed).length;
-
-    document.getElementById("weekCount").textContent =
-      `${completedThisWeek}/7`;
-
-    renderCountdowns();
+    });
+    navigator.clipboard.writeText(summary);
+    alert('Weekly summary copied to clipboard! Paste it directly into our coaching chat.');
   }
 
-  function toggleDetails(button) {
-    const card = button.closest(".day");
-
-    card.classList.toggle("open");
-
-    button.textContent =
-      button.textContent === "+" ? "−" : "+";
-  }
-
-  function toggleComplete(date, value) {
-    saved[date] = saved[date] || {};
-    saved[date].completed = value;
-
-    localStorage.setItem(
-      "waihekeTriPlan",
-      JSON.stringify(saved)
-    );
-
-    render();
-  }
-
-  function saveNote(date, value) {
-    saved[date] = saved[date] || {};
-    saved[date].note = value;
-
-    localStorage.setItem(
-      "waihekeTriPlan",
-      JSON.stringify(saved)
-    );
-  }
-
-  function saveRpe(date, value) {
-    saved[date] = saved[date] || {};
-    saved[date].rpe = value;
-
-    localStorage.setItem(
-      "waihekeTriPlan",
-      JSON.stringify(saved)
-    );
-  }
-
-  function changeWeek(amount) {
-    viewDate.setDate(
-      viewDate.getDate() + amount * 7
-    );
-
-    render();
-  }
-
-  function showToday() {
-    viewDate = new Date();
-    render();
-  }
-
-  render();
+  window.onload = loadSavedData;
 </script>
 
 </body>
