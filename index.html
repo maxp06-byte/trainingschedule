@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coach Dashboard | T21 & 70.3 Tracker</title>
+  <title>Coach Dashboard | T21 & 70.3 Master Tracker</title>
   <style>
     :root {
       --bg: #0f172a;
@@ -18,52 +18,51 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: var(--bg); color: var(--text); padding-bottom: 60px; }
     header { background: var(--card); border-bottom: 1px solid var(--border); padding: 15px 20px; text-align: center; position: sticky; top: 0; z-index: 100; }
-    header h1 { font-size: 1.2rem; color: #60a5fa; text-transform: uppercase; letter-spacing: 1px; }
-    header p { font-size: 0.8rem; color: var(--text-muted); }
+    header h1 { font-size: 1.1rem; color: #60a5fa; text-transform: uppercase; letter-spacing: 1px; }
+    header p { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
     
-    nav { display: flex; overflow-x: auto; background: var(--card); border-bottom: 1px solid var(--border); padding: 5px; gap: 5px; scrollbar-width: none; }
+    nav { display: flex; overflow-x: auto; background: var(--card); border-bottom: 1px solid var(--border); padding: 6px; gap: 4px; scrollbar-width: none; }
     nav::-webkit-scrollbar { display: none; }
-    nav button { background: transparent; border: none; color: var(--text-muted); padding: 8px 14px; font-size: 0.85rem; font-weight: 600; border-radius: 6px; cursor: pointer; whitespace: nowrap; }
-    nav button.active { background: var(--accent); color: #fff; }
+    nav button { background: transparent; border: 1px solid transparent; color: var(--text-muted); padding: 6px 12px; font-size: 0.8rem; font-weight: 600; border-radius: 6px; cursor: pointer; whitespace: nowrap; }
+    nav button.active { background: var(--accent); color: #fff; border-color: var(--accent-hover); }
 
-    .container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
+    .container { max-width: 900px; margin: 15px auto; padding: 0 12px; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin-bottom: 15px; }
-    .card h2 { font-size: 1.1rem; color: #93c5fd; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .card h2 { font-size: 1rem; color: #93c5fd; margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
     
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
     
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
-    th, td { border: 1px solid var(--border); padding: 8px; text-align: left; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.8rem; }
+    th, td { border: 1px solid var(--border); padding: 6px; text-align: left; }
     th { background: #0f172a; color: #93c5fd; }
     
-    input, select, textarea { width: 100%; background: #0f172a; border: 1px solid var(--border); color: #fff; padding: 8px; border-radius: 5px; font-size: 0.85rem; margin-top: 4px; }
-    label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: bold; }
+    input, select, textarea { width: 100%; background: #0f172a; border: 1px solid var(--border); color: #fff; padding: 6px; border-radius: 4px; font-size: 0.8rem; margin-top: 3px; }
+    label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: bold; }
     
-    .btn { background: var(--accent); color: #fff; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    .btn { background: var(--accent); color: #fff; border: none; padding: 10px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; font-size: 0.85rem; }
     .btn:hover { background: var(--accent-hover); }
     .btn-success { background: var(--success); }
 
-    .day-block { border-left: 4px solid var(--accent); padding-left: 12px; margin-bottom: 15px; }
-    .day-title { font-weight: bold; color: #f1f5f9; display: flex; justify-content: space-between; }
-    .day-sub { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; }
+    .day-block { border-left: 3px solid var(--accent); padding-left: 10px; margin-bottom: 12px; }
+    .day-title { font-weight: bold; color: #f1f5f9; display: flex; justify-content: space-between; font-size: 0.85rem; }
+    .day-sub { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Triathlon Coaching Dashboard</h1>
-  <p>Athlete: 27yo Male | Targets: T21 Sub-1:35 | Taupō 70.3 Sub-5:00</p>
+  <h1>Coach Dashboard | Master Tracker</h1>
+  <p>Athlete: 27yo Male | T21 Sub-1:35 | Taupō 70.3 Sub-5:00</p>
 </header>
 
 <nav id="nav-tabs">
   <button class="active" onclick="switchTab('dashboard')">Dashboard</button>
-  <button onclick="switchTab('w01')">Week 01</button>
-  <button onclick="switchTab('w02')">Week 02</button>
-  <button onclick="switchTab('prehab')">Strength & Prehab</button>
+  <button onclick="switchTab('prehab')">Prehab & Gym</button>
   <button onclick="switchTab('nutrition')">Nutrition</button>
+  <!-- Weekly Tabs (W00 to W26) inserted dynamically -->
 </nav>
 
 <div class="container">
@@ -71,128 +70,46 @@
   <!-- DASHBOARD TAB -->
   <div id="dashboard" class="tab-content active">
     <div class="card">
-      <h2>Primary Goals & Reality Check</h2>
+      <h2>Primary Goals & Targets</h2>
       <div class="grid-2">
         <div>
           <strong>Tarawera T21 (13 Feb 2027)</strong>
-          <p style="font-size: 0.85rem; color: var(--text-muted);">Target: Sub-1:35 (~4:08/km pace over 23km / 400m vert)</p>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Goal: Sub-1:35 (4:08/km avg over 23km / 400m vert)</p>
         </div>
         <div>
           <strong>Taupō 70.3 (6 Mar 2027)</strong>
-          <p style="font-size: 0.85rem; color: var(--text-muted);">Target: Sub-5:00 (~33m Swim / 2h35m Bike / 1h40m Run)</p>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Goal: Sub-5:00 (~33m Swim / 2h35m Bike / 1h40m Run)</p>
         </div>
       </div>
     </div>
 
     <div class="card">
-      <h2>Master Schedule Rules</h2>
-      <ul style="font-size: 0.85rem; color: var(--text-muted); padding-left: 20px; line-height: 1.6;">
-        <li><strong>Work Days:</strong> Sunday – Wednesday (08:00 – 18:00) | No Long Runs.</li>
-        <li><strong>Football:</strong> Tuesday 19:00–20:00 (High intensity, mandatory 5m ankle warm-up).</li>
-        <li><strong>Key Run Day:</strong> Thursday (Hills / Intervals / Speed).</li>
-        <li><strong>Key Bike Day:</strong> Friday (Aerobic + Aerobar progression).</li>
-        <li><strong>Default Long Run:</strong> Saturday (Trail & Vert emphasis).</li>
+      <h2>Benchmark Milestones</h2>
+      <ul style="font-size: 0.8rem; color: var(--text-muted); padding-left: 18px; line-height: 1.5;">
+        <li><strong>5K Benchmark:</strong> Sub-20:00 (Targeted in Phase 2 / W10)</li>
+        <li><strong>10K Benchmark:</strong> Sub-45:00 (Targeted in Phase 3 / W14)</li>
+        <li><strong>Half Marathon Benchmark:</strong> Sub-1:40:00</li>
+        <li><strong>Solo Olympic Tri Rehearsal:</strong> Mid/Late Jan 2027 (W19)</li>
       </ul>
     </div>
   </div>
 
-  <!-- WEEK 01 TAB -->
-  <div id="w01" class="tab-content">
-    <div class="card">
-      <h2>Week 01: Re-Entry & Aerobic Base (13 Sep – 19 Sep 2026)</h2>
-      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Enter your actual data after workouts. Saves automatically to your browser local storage.</p>
-      
-      <!-- Sunday -->
-      <div class="day-block">
-        <div class="day-title"><span>SUN 13 SEP — Active Recovery & Mobility</span><span>Target: RPE 2</span></div>
-        <div class="day-sub">Work 08:00–18:00 | 25m Ankle Prehab + Core Routine</div>
-        <div class="grid-2">
-          <div><label>Actual Dur (min)</label><input type="number" id="w01_sun_dur" placeholder="25"></div>
-          <div><label>Actual RPE (1-10)</label><input type="number" id="w01_sun_rpe" placeholder="2"></div>
-        </div>
-      </div>
-
-      <!-- Monday -->
-      <div class="day-block">
-        <div class="day-title"><span>MON 14 SEP — Aerobic Base Run</span><span>Target: RPE 3-4 (Z2)</span></div>
-        <div class="day-sub">Work 08:00–18:00 | 45m (~7-8 km) Nose-breathing run</div>
-        <div class="grid-2">
-          <div><label>Dist (km) / Pace</label><input type="text" id="w01_mon_dist" placeholder="7.5 km @ 5:45/km"></div>
-          <div><label>Avg / Max HR</label><input type="text" id="w01_mon_hr" placeholder="148 / 158 bpm"></div>
-        </div>
-      </div>
-
-      <!-- Tuesday -->
-      <div class="day-block">
-        <div class="day-title"><span>TUE 15 SEP — Indoor Football</span><span>Target: RPE 7-8</span></div>
-        <div class="day-sub">Work 08:00–18:00 | 60m Football (5m dynamic ankle warm-up pre-game)</div>
-        <div class="grid-2">
-          <div><label>Actual RPE</label><input type="number" id="w01_tue_rpe" placeholder="8"></div>
-          <div><label>Ankle/Joint Sensation</label><input type="text" id="w01_tue_notes" placeholder="Fine / slight tightness"></div>
-        </div>
-      </div>
-
-      <!-- Thursday -->
-      <div class="day-block">
-        <div class="day-title"><span>THU 17 SEP — Key Run: Hill Repeats</span><span>Target: RPE 7-8</span></div>
-        <div class="day-sub">Day Off Work | 40m total (15m W/U + 6x60s Hill Climbs + 10m C/D)</div>
-        <div class="grid-2">
-          <div><label>Dist / Elevation</label><input type="text" id="w01_thu_dist" placeholder="6.2 km / 120m vert"></div>
-          <div><label>Avg / Max HR</label><input type="text" id="w01_thu_hr" placeholder="162 / 181 bpm"></div>
-        </div>
-      </div>
-
-      <!-- Friday -->
-      <div class="day-block">
-        <div class="day-title"><span>FRI 18 SEP — Key Bike: Aerobic + Aero Intro</span><span>Target: RPE 3-4</span></div>
-        <div class="day-sub">Day Off Work | 75m Road Bike (4x3m Aero touches on flat)</div>
-        <div class="grid-2">
-          <div><label>Speed / Cadence</label><input type="text" id="w01_fri_speed" placeholder="27.5 km/h @ 88 rpm"></div>
-          <div><label>Fuel Consumed</label><input type="text" id="w01_fri_fuel" placeholder="1 gel + 750ml water"></div>
-        </div>
-      </div>
-
-      <!-- Saturday -->
-      <div class="day-block">
-        <div class="day-title"><span>SAT 19 SEP — Default Long Run: Trail</span><span>Target: RPE 3-4 (Z2)</span></div>
-        <div class="day-sub">Day Off Work | 75m Trail Run (~150-200m vert)</div>
-        <div class="grid-2">
-          <div><label>Dist / Vert</label><input type="text" id="w01_sat_dist" placeholder="12 km / 180m vert"></div>
-          <div><label>Pre-Run Meal / Fuel</label><input type="text" id="w01_sat_fuel" placeholder="Toast+Jam, 1 gel @ 40m"></div>
-        </div>
-      </div>
-
-      <!-- Summary / Feedback Section -->
-      <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 15px;">
-        <label>Polar Chest Strap Status</label>
-        <input type="text" id="w01_polar_status" placeholder="Re-paired and functional? Ready for Mon 21 Sep test?">
-        
-        <label style="margin-top: 10px; display: block;">Weekly Feedback & Niggles (For Coach Review)</label>
-        <textarea id="w01_weekly_notes" rows="3" placeholder="Overall sleep, muscle fatigue, ankle status, questions..."></textarea>
-        
-        <button class="btn btn-success" onclick="saveWeek('w01')">Save Data</button>
-        <button class="btn" onclick="copyWeeklySummary('w01')">Copy Summary for Chat Review</button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- STRENGTH & PREHAB TAB -->
+  <!-- PREHAB TAB -->
   <div id="prehab" class="tab-content">
     <div class="card">
-      <h2>Ankle, Knee & Upper Body Library</h2>
-      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">Perform 2-3x weekly on yoga mat (Bodyweight + 1 Dumbbell if available).</p>
+      <h2>Ankle, Knee & Upper Physique Routine</h2>
+      <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">Perform 2-3x weekly on yoga mat (Bodyweight + 1 Dumbbell when acquired).</p>
       <table>
         <thead>
           <tr><th>Exercise</th><th>Sets & Reps</th><th>Focus Cue</th></tr>
         </thead>
         <tbody>
-          <tr><td>Single-Leg Calf Raises</td><td>3 x 15 reps/side</td><td>3-sec lowering; pause at top. Achilles durability.</td></tr>
-          <tr><td>Seated Tibialis Raises</td><td>3 x 20 reps</td><td>Flex toes toward shins against wall/weight. Prevents shin splints.</td></tr>
-          <tr><td>Single-Leg Cushion Balance</td><td>3 x 45s/side</td><td>Micro-adjust at ankle; slight knee flex. Ankle stability.</td></tr>
+          <tr><td>Single-Leg Calf Raises</td><td>3 x 15 reps/side</td><td>3-sec eccentric lowering; pause at top. Achilles durability.</td></tr>
+          <tr><td>Seated Shin Raises (Tibialis)</td><td>3 x 20 reps</td><td>Flex toes up toward shins against wall. Shin splint/knee protection.</td></tr>
+          <tr><td>Single-Leg Cushion Balance</td><td>3 x 45s/side</td><td>Micro-adjust at ankle; slight knee bend. Ankle proprioception.</td></tr>
           <tr><td>Bulgarian Split Squats</td><td>3 x 10-12/side</td><td>Knee tracks over 2nd toe; full depth. VMO / knee health.</td></tr>
-          <tr><td>Single-Leg Glute Bridges</td><td>3 x 12 reps/side</td><td>Squeeze glute at top lock. Posterior chain power.</td></tr>
-          <tr><td>Push-ups & Hollow Holds</td><td>3 x 12-15 / 3x45s</td><td>Locked core. Upper chest/shoulder hypertrophy & posture.</td></tr>
+          <tr><td>Single-Leg Glute Bridges</td><td>3 x 12 reps/side</td><td>Drive through heel; squeeze glute at top. Posterior chain.</td></tr>
+          <tr><td>Push-ups & Hollow Holds</td><td>3 x 12-15 / 3x45s</td><td>Locked core. Upper back, chest & six-pack strength.</td></tr>
         </tbody>
       </table>
     </div>
@@ -201,32 +118,169 @@
   <!-- NUTRITION TAB -->
   <div id="nutrition" class="tab-content">
     <div class="card">
-      <h2>Race Fueling & Stomach Lockdown</h2>
-      <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
-        <p style="color: #ef4444; font-weight: bold;">MANDATE: ZERO RAW/UNCOOKED STARCHES BEFORE RACES OR HARD EFFORTS.</p>
+      <h2>Race Fueling & Stomach Protocol</h2>
+      <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+        <p style="color: #ef4444; font-weight: bold;">MANDATE: NO RAW/UNCOOKED STARCHES PRE-RACE OR PRE-RUN.</p>
         <br>
-        <p><strong>Pre-Race / Key Session Breakfast (2.5 - 3 Hours Prior):</strong></p>
+        <p><strong>Pre-Race Breakfast (2.5 - 3 Hours Before):</strong></p>
         <ul>
           <li>2 slices white toast with jam or honey</li>
-          <li>1 medium ripe banana</li>
-          <li>300–400ml water or light electrolyte drink</li>
+          <li>1 ripe banana</li>
+          <li>300–400ml water / light electrolytes</li>
         </ul>
         <br>
-        <p><strong>During Bike (70.3 Prep):</strong> 60–80g carbs/hr (1 isotonic bottle + 1 gel per 45 min).</p>
-        <p><strong>During Trail Run (T21 Prep):</strong> 30–45g carbs/hr (1 hydrogel every 40-45m with plain water).</p>
+        <p><strong>70.3 Bike Fueling:</strong> 60–80g carbs/hr (1 isotonic bottle + 1 gel per 45 min).</p>
+        <p><strong>T21 Run Fueling:</strong> 30–45g carbs/hr (1 hydrogel every 40-45 min with plain water).</p>
       </div>
     </div>
   </div>
 
+  <!-- Dynamic Weekly Tabs container -->
+  <div id="weekly-tabs-container"></div>
+
 </div>
 
 <script>
-  function switchTab(tabId) {
+  // Master 27-Week Structure
+  const weeksData = [
+    { id: "w00", name: "W00", title: "W00: Recovery Week (6-12 Sep 2026)", tss: 240, plan: [
+      { day: "SUN 06 SEP", session: "21K Race (Completed, 1:53:33)", rpe: "10" },
+      { day: "MON 07 SEP", session: "Rest & Active Recovery Walk", rpe: "1" },
+      { day: "TUE 08 SEP", session: "Easy Walking & Foam Rolling", rpe: "1" },
+      { day: "WED 09 SEP", session: "Full Rest Day", rpe: "0" },
+      { day: "THU 10 SEP", session: "Rest & Ankle/Knee Light Mobility", rpe: "1" },
+      { day: "FRI 11 SEP", session: "Easy Bike 45–60 min (Flat/Rolling, RPE 2-3)", rpe: "2" },
+      { day: "SAT 12 SEP", session: "Recovery / Easy Movement 30 min", rpe: "2" }
+    ]},
+    { id: "w01", name: "W01", title: "W01: Re-Entry & Base (13-19 Sep 2026)", tss: 315, plan: [
+      { day: "SUN 13 SEP", session: "Ankle/Knee Prehab + Core (25m)", rpe: "2" },
+      { day: "MON 14 SEP", session: "Aerobic Base Run 45m (~7-8km)", rpe: "3-4" },
+      { day: "TUE 15 SEP", session: "Indoor Football 60m (5m ankle warm-up pre-game)", rpe: "7-8" },
+      { day: "WED 16 SEP", session: "Full Rest Day", rpe: "0" },
+      { day: "THU 17 SEP", session: "Key Run: Hill Repeats (40m total: 15m W/U + 6x60s Hills + 10m C/D)", rpe: "7-8" },
+      { day: "FRI 18 SEP", session: "Key Bike: Aerobic 75m (4x3m Aero touches on flat)", rpe: "3-4" },
+      { day: "SAT 19 SEP", session: "Long Trail Run 75m (~11-13km, ~150-200m vert)", rpe: "3-4" }
+    ]},
+    { id: "w02", name: "W02", title: "W02: HR Threshold Test Week (20-26 Sep 2026)", tss: 340, plan: [
+      { day: "SUN 20 SEP", session: "Active Mobility & Light Ankle Prehab (25m)", rpe: "2" },
+      { day: "MON 21 SEP", session: "PROVISIONAL 30-Min HR Threshold Test (15m W/U + 30m Hard Even Effort + 10m C/D)", rpe: "9" },
+      { day: "TUE 22 SEP", session: "Indoor Football 60m (Controlled effort post-test)", rpe: "6-7" },
+      { day: "WED 23 SEP", session: "Full Rest Day (Holiday 23-27 Sep Starts)", rpe: "0" },
+      { day: "THU 24 SEP", session: "Flexible Aerobic Run 45m (Holiday)", rpe: "3-4" },
+      { day: "FRI 25 SEP", session: "Flexible Bike / Cross-Training 60m", rpe: "3" },
+      { day: "SAT 26 SEP", session: "Long Trail Run 80m (Holiday)", rpe: "3-4" }
+    ]},
+    { id: "w03", name: "W03", title: "W03: Aerobic Base & Tempo Intro (27 Sep-3 Oct 2026)", tss: 350, plan: [
+      { day: "SUN 27 SEP", session: "Ankle Prehab + Upper Body Dumbbell/Bodyweight", rpe: "2" },
+      { day: "MON 28 SEP", session: "Aerobic Base Run 50m (~8-9km)", rpe: "3-4" },
+      { day: "TUE 29 SEP", session: "Indoor Football 60m", rpe: "7-8" },
+      { day: "WED 30 SEP", session: "Full Rest Day", rpe: "0" },
+      { day: "THU 01 OCT", session: "Key Run: Tempo 45m (10m W/U + 20m Z3 Tempo + 15m C/D)", rpe: "6-7" },
+      { day: "FRI 02 OCT", session: "Key Bike: Rolling Aerobic 90m (4x5m Aero touches)", rpe: "3-4" },
+      { day: "SAT 03 OCT", session: "Long Trail Run 85m (~13-14km, ~200m vert)", rpe: "3-4" }
+    ]},
+    { id: "w04", name: "W04", title: "W04: Aerobic Build & Swim Intro (4-10 Oct 2026)", tss: 365, plan: [
+      { day: "SUN 04 OCT", session: "Intro Swim 30m (Technique/Sighting) + Ankle Prehab", rpe: "2-3" },
+      { day: "MON 05 OCT", session: "Aerobic Base Run 50m", rpe: "3-4" },
+      { day: "TUE 06 OCT", session: "Indoor Football 60m", rpe: "7-8" },
+      { day: "WED 07 OCT", session: "Full Rest Day", rpe: "0" },
+      { day: "THU 08 OCT", session: "Key Run: Hill Intervals (15m W/U + 8x60s Hard Climbs + 10m C/D)", rpe: "8" },
+      { day: "FRI 09 OCT", session: "Key Bike: Aerobic Endurance 100m", rpe: "3-4" },
+      { day: "SAT 10 OCT", session: "Long Trail Run 90m (~14-15km)", rpe: "3-4" }
+    ]},
+    { id: "w05", name: "W05", title: "W05: Phase 1 Deload & Recovery (11-17 Oct 2026)", tss: 270, plan: [
+      { day: "SUN 11 OCT", session: "Mobility & Light Ankle Work", rpe: "2" },
+      { day: "MON 12 OCT", session: "Easy Aerobic Run 40m", rpe: "3" },
+      { day: "TUE 13 OCT", session: "Indoor Football 60m (Controlled)", rpe: "6-7" },
+      { day: "WED 14 OCT", session: "Full Rest Day", rpe: "0" },
+      { day: "THU 15 OCT", session: "Easy Run 35m + 4 Strides", rpe: "3-4" },
+      { day: "FRI 16 OCT", session: "Easy Bike Spin 60m", rpe: "2-3" },
+      { day: "SAT 17 OCT", session: "Easy Trail Run 70m", rpe: "3" }
+    ]}
+  ];
+
+  // Dynamically create remaining weeks W06 to W26
+  for (let i = 6; i <= 26; i++) {
+    const wId = i < 10 ? `w0${i}` : `w${i}`;
+    let wTitle = `W${i < 10 ? '0' + i : i}: Training Build Phase`;
+    if (i === 8) wTitle = "W08: Travel / Holiday Week (1-9 Nov 2026)";
+    if (i === 10) wTitle = "W10: 5K Speed Benchmark Test";
+    if (i === 14) wTitle = "W14: 10K Speed Benchmark Test";
+    if (i === 19) wTitle = "W19: SOLO OLYMPIC TRIATHLON REHEARSAL";
+    if (i === 22) wTitle = "W22: TARAWERA T21 RACE WEEK (13 Feb 2027)";
+    if (i === 26) wTitle = "W26: TAUPŌ 70.3 RACE WEEK (6 Mar 2027)";
+
+    weeksData.push({
+      id: wId,
+      name: `W${i < 10 ? '0' + i : i}`,
+      title: wTitle,
+      tss: 350 + (i * 5),
+      plan: [
+        { day: "SUN", session: "Active Mobility / Swim / Prehab", rpe: "2-3" },
+        { day: "MON", session: "Aerobic Base Run or Key Threshold", rpe: "3-4" },
+        { day: "TUE", session: "Indoor Football 60m (No Football W23-W26)", rpe: "7-8" },
+        { day: "WED", session: "Full Rest Day", rpe: "0" },
+        { day: "THU", session: "Key Run Session (Hills / Speed / Specificity)", rpe: "7-8" },
+        { day: "FRI", session: "Key Bike Endurance + Aerobar Progression", rpe: "3-4" },
+        { day: "SAT", session: "Default Long Trail Run (Race Fueling Practice)", rpe: "3-4" }
+      ]
+    });
+  }
+
+  // Render navigation buttons and weekly content
+  const navContainer = document.getElementById('nav-tabs');
+  const weeklyContainer = document.getElementById('weekly-tabs-container');
+
+  weeksData.forEach(w => {
+    // Add button
+    const btn = document.createElement('button');
+    btn.innerText = w.name;
+    btn.onclick = (e) => switchTab(w.id, e);
+    navContainer.appendChild(btn);
+
+    // Add content
+    const tabDiv = document.createElement('div');
+    tabDiv.id = w.id;
+    tabDiv.className = 'tab-content';
+
+    let html = `
+      <div class="card">
+        <h2>${w.title}</h2>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">Target TSS: ~${w.tss} | Lock data post-session.</p>
+    `;
+
+    w.plan.forEach((item, index) => {
+      html += `
+        <div class="day-block">
+          <div class="day-title"><span>${item.day} — ${item.session}</span><span>Target RPE: ${item.rpe}</span></div>
+          <div class="grid-2" style="margin-top: 4px;">
+            <div><label>Actual Dist / Dur</label><input type="text" id="${w.id}_d${index}_dist" placeholder="e.g. 8.2km / 46m"></div>
+            <div><label>Actual HR / RPE</label><input type="text" id="${w.id}_d${index}_hr" placeholder="e.g. 152 bpm / RPE 4"></div>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+        <div style="margin-top: 15px; border-top: 1px solid var(--border); padding-top: 12px;">
+          <label>Weekly Feedback, Sleep & Niggles</label>
+          <textarea id="${w.id}_notes" rows="2" placeholder="Ankle/knee sensation, sleep quality, GI notes, football load..."></textarea>
+          <button class="btn btn-success" onclick="saveWeek('${w.id}')">Save Week Data</button>
+          <button class="btn" onclick="copyWeeklySummary('${w.id}')">Copy Summary for Coach Review</button>
+        </div>
+      </div>
+    `;
+
+    tabDiv.innerHTML = html;
+    weeklyContainer.appendChild(tabDiv);
+  });
+
+  function switchTab(tabId, event) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
     
     document.getElementById(tabId).classList.add('active');
-    event.target.classList.add('active');
+    if(event) event.target.classList.add('active');
   }
 
   function saveWeek(weekId) {
@@ -234,7 +288,7 @@
     inputs.forEach(input => {
       localStorage.setItem(input.id, input.value);
     });
-    alert('Workout data saved locally!');
+    alert('Week data saved locally!');
   }
 
   function loadSavedData() {
@@ -250,11 +304,11 @@
     const inputs = document.querySelectorAll(`#${weekId} input, #${weekId} textarea`);
     inputs.forEach(input => {
       if(input.value) {
-        summary += `- ${input.previousElementSibling ? input.previousElementSibling.innerText : input.id}: ${input.value}\n`;
+        summary += `- ${input.id}: ${input.value}\n`;
       }
     });
     navigator.clipboard.writeText(summary);
-    alert('Weekly summary copied to clipboard! Paste it directly into our coaching chat.');
+    alert('Summary copied! Paste directly into our coaching chat.');
   }
 
   window.onload = loadSavedData;
